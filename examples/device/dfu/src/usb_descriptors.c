@@ -82,15 +82,16 @@ uint8_t const * tud_descriptor_device_cb(void)
 //--------------------------------------------------------------------+
 
 // Number of Alternate Interface (each for 1 flash partition)
-#define ALT_COUNT   2
+#define ALT_COUNT   1
 
 enum
 {
-  ITF_NUM_DFU_MODE,
+  ITF_NUM_DFU_MODE1,
+  ITF_NUM_DFU_MODE2,
   ITF_NUM_TOTAL
 };
 
-#define CONFIG_TOTAL_LEN    (TUD_CONFIG_DESC_LEN + TUD_DFU_DESC_LEN(ALT_COUNT))
+#define CONFIG_TOTAL_LEN    (TUD_CONFIG_DESC_LEN + TUD_DFU_DESC_LEN(ALT_COUNT) + TUD_DFU_DESC_LEN(ALT_COUNT))
 
 #define FUNC_ATTRS (DFU_ATTR_CAN_UPLOAD | DFU_ATTR_CAN_DOWNLOAD | DFU_ATTR_MANIFESTATION_TOLERANT)
 
@@ -100,7 +101,8 @@ uint8_t const desc_configuration[] =
   TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, 0x00, 100),
 
   // Interface number, Alternate count, starting string index, attributes, detach timeout, transfer size
-  TUD_DFU_DESCRIPTOR(ITF_NUM_DFU_MODE, ALT_COUNT, 4, FUNC_ATTRS, 1000, CFG_TUD_DFU_XFER_BUFSIZE),
+  TUD_DFU_DESCRIPTOR(ITF_NUM_DFU_MODE1, ALT_COUNT, 4, FUNC_ATTRS, 1000, CFG_TUD_DFU_XFER_BUFSIZE),
+  TUD_DFU_DESCRIPTOR(ITF_NUM_DFU_MODE2, ALT_COUNT, 5, FUNC_ATTRS, 1000, CFG_TUD_DFU_XFER_BUFSIZE),
 };
 
 // Invoked when received GET CONFIGURATION DESCRIPTOR
@@ -123,8 +125,11 @@ char const* string_desc_arr [] =
   "TinyUSB",                     // 1: Manufacturer
   "TinyUSB Device",              // 2: Product
   "123456",                      // 3: Serials, should use chip ID
-  "FLASH",                       // 4: DFU Partition 1
-  "EEPROM",                      // 5: DFU Partition 2
+  "FLASH",                       // 4: DFU Interface 1
+  "EEPROM",                      // 5: DFU Interface 2
+  "6",
+  "7",
+  "8"
 };
 
 static uint16_t _desc_str[32];

@@ -130,7 +130,7 @@ uint32_t tud_dfu_get_timeout_cb(uint8_t alt, uint8_t state)
   if ( state == DFU_DNBUSY )
   {
     // For this example
-    // - Atl0 Flash is fast : 1   ms
+    // - Alt0 Flash is fast : 1   ms
     // - Alt1 EEPROM is slow: 100 ms
     return (alt == 0) ? 1 : 100;
   }
