@@ -75,9 +75,8 @@ uint8_t const * tud_descriptor_device_cb(void)
 //--------------------------------------------------------------------+
 enum
 {
-  ITF_NUM_CDC = 0,
-  ITF_NUM_CDC_DATA,
-  ITF_NUM_VENDOR,
+  ITF_NUM_VENDOR0 = 0,
+  ITF_NUM_VENDOR1,
   ITF_NUM_TOTAL
 };
 
@@ -109,11 +108,9 @@ uint8_t const desc_configuration[] =
   // Config number, interface count, string index, total length, attribute, power in mA
   TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, 0x00, 100),
 
-  // Interface number, string index, EP notification address and size, EP data address (out, in) and size.
-  TUD_CDC_DESCRIPTOR(ITF_NUM_CDC, 4, 0x81, 8, EPNUM_CDC_OUT, 0x80 | EPNUM_CDC_IN, TUD_OPT_HIGH_SPEED ? 512 : 64),
-
   // Interface number, string index, EP Out & IN address, EP size
-  TUD_VENDOR_DESCRIPTOR(ITF_NUM_VENDOR, 5, EPNUM_VENDOR_OUT, 0x80 | EPNUM_VENDOR_IN, TUD_OPT_HIGH_SPEED ? 512 : 64)
+  TUD_VENDOR_DESCRIPTOR(ITF_NUM_VENDOR0, 4, EPNUM_VENDOR_OUT, 0x80 | EPNUM_VENDOR_IN, TUD_OPT_HIGH_SPEED ? 512 : 64),
+  TUD_VENDOR_DESCRIPTOR(ITF_NUM_VENDOR1, 5, EPNUM_VENDOR_OUT, 0x80 | EPNUM_VENDOR_IN, TUD_OPT_HIGH_SPEED ? 512 : 64)
 };
 
 // Invoked when received GET CONFIGURATION DESCRIPTOR
@@ -175,7 +172,7 @@ uint8_t const desc_ms_os_20[] =
   U16_TO_U8S_LE(0x0008), U16_TO_U8S_LE(MS_OS_20_SUBSET_HEADER_CONFIGURATION), 0, 0, U16_TO_U8S_LE(MS_OS_20_DESC_LEN-0x0A),
 
   // Function Subset header: length, type, first interface, reserved, subset length
-  U16_TO_U8S_LE(0x0008), U16_TO_U8S_LE(MS_OS_20_SUBSET_HEADER_FUNCTION), ITF_NUM_VENDOR, 0, U16_TO_U8S_LE(MS_OS_20_DESC_LEN-0x0A-0x08),
+  U16_TO_U8S_LE(0x0008), U16_TO_U8S_LE(MS_OS_20_SUBSET_HEADER_FUNCTION), ITF_NUM_VENDOR0, 0, U16_TO_U8S_LE(MS_OS_20_DESC_LEN-0x0A-0x08),
 
   // MS OS 2.0 Compatible ID descriptor: length, type, compatible ID, sub compatible ID
   U16_TO_U8S_LE(0x0014), U16_TO_U8S_LE(MS_OS_20_FEATURE_COMPATBLE_ID), 'W', 'I', 'N', 'U', 'S', 'B', 0x00, 0x00,
@@ -207,8 +204,8 @@ char const* string_desc_arr [] =
   "TinyUSB",                     // 1: Manufacturer
   "TinyUSB Device",              // 2: Product
   "123456",                      // 3: Serials, should use chip ID
-  "TinyUSB CDC",                 // 4: CDC Interface
-  "TinyUSB WebUSB"               // 5: Vendor Interface
+  "Vendor Interface 0",          // 4: Vendor Interface 0
+  "Vendor Interface 1"           // 4: Vendor Interface 1
 };
 
 static uint16_t _desc_str[32];
